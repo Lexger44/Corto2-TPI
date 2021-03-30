@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.entity;
 
 import java.io.Serializable;
@@ -47,7 +43,7 @@ public class Ejemplar implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private int id;
     @Column(name = "fechaAdquisicion")
     @Temporal(TemporalType.DATE)
     private Date fechaAdquisicion;
@@ -76,20 +72,20 @@ public class Ejemplar implements Serializable {
     public Ejemplar() {
     }
 
-    public Ejemplar(Long id) {
+    public Ejemplar(int id) {
         this.id = id;
     }
 
-    public Ejemplar(Long id, String localizacion) {
+    public Ejemplar(int id, String localizacion) {
         this.id = id;
         this.localizacion = localizacion;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -165,25 +161,9 @@ public class Ejemplar implements Serializable {
         this.historicoSet = historicoSet;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
+   
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Ejemplar)) {
-            return false;
-        }
-        Ejemplar other = (Ejemplar) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
+   
 
     @Override
     public String toString() {
