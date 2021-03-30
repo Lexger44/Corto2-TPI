@@ -47,7 +47,7 @@ public class Libro implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private int id;
     @Column(name = "autor", length = 255)
     private String autor;
     @Column(name = "fechaAlta")
@@ -69,15 +69,15 @@ public class Libro implements Serializable {
     public Libro() {
     }
 
-    public Libro(Long id) {
+    public Libro(int id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -143,26 +143,6 @@ public class Libro implements Serializable {
 
     public void setReservaSet(Set<Reserva> reservaSet) {
         this.reservaSet = reservaSet;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Libro)) {
-            return false;
-        }
-        Libro other = (Libro) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
     }
 
     @Override
