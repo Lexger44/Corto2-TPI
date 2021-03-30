@@ -39,7 +39,16 @@ public class BibliotecarioTest {
     @AfterAll
     public static void tearDownClass() {
         registro = null;
-    }           
+    }    
+    
+    @Test
+    public void testBibliotecario(){
+        System.out.println("Bibliotecario");
+        Bibliotecario instance = new Bibliotecario(2L);
+        Long expResult = 2L;
+        Long result = instance.getId();
+        assertEquals(expResult, result);
+    }
     
     /**
      * Test of getId method, of class Bibliotecario.
