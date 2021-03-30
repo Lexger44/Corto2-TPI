@@ -88,31 +88,7 @@ public class BibliotecarioJpaController implements Serializable {
             }
         }
     }
-
-    public List<Bibliotecario> findBibliotecarioEntities() {
-        return findBibliotecarioEntities(true, -1, -1);
-    }
-
-    public List<Bibliotecario> findBibliotecarioEntities(int maxResults, int firstResult) {
-        return findBibliotecarioEntities(false, maxResults, firstResult);
-    }
-
-    private List<Bibliotecario> findBibliotecarioEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Bibliotecario.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
+    
     public Bibliotecario findBibliotecario(Long id) {
         EntityManager em = getEntityManager();
         try {
