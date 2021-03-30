@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.controllers;
 
 import com.mycompany.controllers.exceptions.IllegalOrphanException;
@@ -157,22 +153,17 @@ public class EjemplarJpaController implements Serializable {
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = ejemplar.getId();
-                if (findEjemplar(id) == null) {
-                    throw new NonexistentEntityException("The ejemplar with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
+           
+        
+        } 
+                finally {
             if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(int id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
