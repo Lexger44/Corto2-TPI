@@ -5,7 +5,8 @@
  */
 package com.mycompany.entity;
 
-import static com.mycompany.entity.Reserva_.id;
+//import static com.mycompany.entity.Bibliotecario_.id;
+import java.text.DateFormat;
 import java.util.Date;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,7 +30,9 @@ public class ReservaTest {
     @BeforeAll
     public static void setUpClass() {         
         registro.setEstado("activo");
-        
+        Date fechaI = new Date(121, 10, 11,16,30,10);
+        System.out.println(DateFormat.getDateInstance().format(fechaI));
+        registro.setFecha(fechaI);
     }
     
     @AfterAll
@@ -59,7 +62,6 @@ public class ReservaTest {
         Long id = 1L;
         Reserva instance = Mockito.mock(Reserva.class);
         instance.setId(id);
-        Mockito.verify(instance).setId(id);
     }
 
     /**
@@ -85,130 +87,106 @@ public class ReservaTest {
         Mockito.verify(instance).setEstado(estado);
     }
 
-//    /**
-//     * Test of getFecha method, of class Reserva.
-//     */
-//    @Test
-//    public void testGetFecha() {
-//        System.out.println("getFecha");
-//        Reserva instance = new Reserva();
-//        Date expResult = null;
-//        Date result = instance.getFecha();
-//        assertEquals(expResult, result);
-//    }
-//
-//    /**
-//     * Test of setFecha method, of class Reserva.
-//     */
-//    @Test
-//    public void testSetFecha() {
-//        System.out.println("setFecha");
-//        Date fecha = null;
-//        Reserva instance = new Reserva();
-//        instance.setFecha(fecha);
-//    }
-//
-//    /**
-//     * Test of getFechaFin method, of class Reserva.
-//     */
-//    @Test
-//    public void testGetFechaFin() {
-//        System.out.println("getFechaFin");
-//        Reserva instance = new Reserva();
-//        Date expResult = null;
-//        Date result = instance.getFechaFin();
-//        assertEquals(expResult, result);
-//    }
-//
-//    /**
-//     * Test of setFechaFin method, of class Reserva.
-//     */
-//    @Test
-//    public void testSetFechaFin() {
-//        System.out.println("setFechaFin");
-//        Date fechaFin = null;
-//        Reserva instance = new Reserva();
-//        instance.setFechaFin(fechaFin);
-//    }
+    /**
+     * Test of getFecha method, of class Reserva.
+     */
+    @Test
+    public void testGetFecha() {
+        System.out.println("getFecha");
+        Date expResult = (Date) Reserva_.fecha;
+        Date result = this.registro.getFecha();
+        assertEquals(expResult, result);
+    }
 
-//    /**
-//     * Test of getTipoFinal method, of class Reserva.
-//     */
-//    @Test
-//    public void testGetTipoFinal() {
-//        System.out.println("getTipoFinal");
-//        Reserva instance = new Reserva();
-//        String expResult = "";
-//        String result = instance.getTipoFinal();
-//        assertEquals(expResult, result);
-//    }
-//
-//    /**
-//     * Test of setTipoFinal method, of class Reserva.
-//     */
-//    @Test
-//    public void testSetTipoFinal() {
-//        System.out.println("setTipoFinal");
-//        String tipoFinal = "";
-//        Reserva instance = new Reserva();
-//        instance.setTipoFinal(tipoFinal);
-//    }
-//
+    /**
+     * Test of setFecha method, of class Reserva.
+     */
+    @Test
+    public void testSetFecha() {
+        System.out.println("setFecha");
+        Date fecha = (Date) Reserva_.fecha;
+        Reserva instance = Mockito.mock(Reserva.class);
+        instance.setFecha(fecha);
+        Mockito.verify(instance).setFecha(fecha);
+    }
+
+    /**
+     * Test of getFechaFin method, of class Reserva.
+     */
+    @Test
+    public void testGetFechaFin() {
+        System.out.println("getFechaFin");
+        Date expResult = (Date) Reserva_.fechaFin;
+        Date result = this.registro.getFechaFin();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of setFechaFin method, of class Reserva.
+     */
+    @Test
+    public void testSetFechaFin() {
+        System.out.println("setFechaFin");
+        Date fechaFin = (Date) Reserva_.fechaFin;
+        Reserva instance = Mockito.mock(Reserva.class);
+        instance.setFechaFin(fechaFin);
+        Mockito.verify(instance).setFechaFin(fechaFin);
+    }
+
 //    /**
 //     * Test of getLibroId method, of class Reserva.
 //     */
 //    @Test
 //    public void testGetLibroId() {
 //        System.out.println("getLibroId");
-//        String expResult = "El jardin de las mariposas";
-//        String result = this.registro.getEstado();
+//        Libro expResult = 9L;
+//        Libro result = this.registro.LibroId;
 //        assertEquals(expResult, result);
 //    }
-
+//
 //    /**
 //     * Test of setLibroId method, of class Reserva.
 //     */
 //    @Test
 //    public void testSetLibroId() {
 //        System.out.println("setLibroId");
-//        String libroId = "El jardin de las mariposas";
+//        String libroId = 9L;
 //        Reserva instance = Mockito.mock(Reserva.class);
 //        instance.setLibroId(libroId);
 //        Mockito.verify(instance).setLibroId(libroId);
 //    }
 
-    /**
-     * Test of getUsuarioId method, of class Reserva.
-     */
-    @Test
-    public void testGetUsuarioId() {
-        System.out.println("getUsuarioId");
-        Reserva instance = new Reserva();
-        Usuario expResult = null;
-        Usuario result = instance.getUsuarioId();
-        assertEquals(expResult, result);
-    }
+//    /**
+//     * Test of getUsuarioId method, of class Reserva.
+//     */
+//    @Test
+//    public void testGetUsuarioId() {
+//        System.out.println("getUsuarioId");
+//        Reserva expResult = registro;
+//        Reserva result = instance.getUsuarioId();
+//        assertEquals(expResult, result);
+//    }
+//
+//    /**
+//     * Test of setUsuarioId method, of class Reserva.
+//     */
+//    @Test
+//    public void testSetUsuarioId() {
+//        System.out.println("setUsuarioId");
+//        Reserva usuarioId = null;
+//        Reserva instance = new Reserva();
+//        instance.setUsuarioId(usuarioId);
+//    }
 
-    /**
-     * Test of setUsuarioId method, of class Reserva.
-     */
-    @Test
-    public void testSetUsuarioId() {
-        System.out.println("setUsuarioId");
-        Usuario usuarioId = null;
-        Reserva instance = new Reserva();
-        instance.setUsuarioId(usuarioId);
-    }
-
-    /**
-     * Test of toString method, of class Reserva.
-     */
-    @Test
-    public void testToString() {
-      System.out.println("toString");        
-        String expResult = "com.mycompany.entity.Reserva[ id=" + id + " ]";
-        String result = this.registro.toString();
-        assertEquals(expResult, result);
- 
-    }
+//    /**
+//     * Test of toString method, of class Reserva.
+//     */
+//    @Test
+//    public void testToString() {
+//      System.out.println("toString");        
+//        String expResult = "com.mycompany.entity.Reserva[ id=" + id + " ]";
+//        String result = this.registro.toString();
+//        assertEquals(expResult, result);
+// 
+//    }
 }
