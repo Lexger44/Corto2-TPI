@@ -26,17 +26,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class LibroTest {
 
     static Libro registro = new Libro();
-
+    Date fechaprueba = new Date(121, 10, 11,16,30,10);
     public LibroTest() {
     }
 
     @BeforeAll
     public static void setUpClass() throws ParseException {
         registro.setAutor("Paquito");
-        SimpleDateFormat d = new SimpleDateFormat("dd-MM-yy");
-        Date fecha = d.parse("31-03-2016");
-        System.out.println(DateFormat.getDateInstance().format(fecha));
-        registro.setFechaAlta(fecha);
+        Date fechaprueba = new Date(121, 10, 11,16,30,10);
+        System.out.println(DateFormat.getDateInstance().format(fechaprueba));
+        registro.setFechaAlta(fechaprueba);
+        registro.setIsbn("Isbnprueba");
     }
 
     @AfterAll
@@ -55,9 +55,6 @@ public class LibroTest {
         //fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of setId method, of class Libro.
-     */
     @Test
     public void testSetId() {
         System.out.println("setId");
@@ -67,13 +64,9 @@ public class LibroTest {
         //fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of getAutor method, of class Libro.
-     */
     @Test
     public void testGetAutor() {
         System.out.println("getAutor");
-//        Libro instance = new Libro();
         String expResult = "Paquito";
         String result = this.registro.getAutor();
         assertEquals(expResult, result);
@@ -81,9 +74,6 @@ public class LibroTest {
         //fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of setAutor method, of class Libro.
-     */
     @Test
     public void testSetAutor() {
         System.out.println("setAutor");
@@ -95,63 +85,50 @@ public class LibroTest {
         //fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of getFechaAlta method, of class Libro.
-     */
     @Test
     public void testGetFechaAlta() throws ParseException {
         System.out.println("getFechaAlta");
-         SimpleDateFormat d = new SimpleDateFormat("dd-MM-yy");
-        Date expResult = d.parse("31-03-2016");;
+        Date expResult = fechaprueba;
         Date result = this.registro.getFechaAlta();
+        assertEquals(expResult, result);
+        //fail("The test case is a prototype.");
+    }
+    @Test
+    public void testSetFechaAlta() {
+        //preguntarle a margueiz
+        System.out.println("setFechaAlta");
+        Date fechaAlta = fechaprueba;
+        Libro instance = Mockito.mock(Libro.class);
+        instance.setFechaAlta(fechaAlta);
+        Mockito.verify(instance).setFechaAlta(fechaAlta);
+        //fail("The test case is a prototype.");
+    }
+
+    @Test
+    public void testGetIsbn() {
+        System.out.println("getIsbn");
+        String expResult = "Isbnprueba";
+        String result = this.registro.getIsbn();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
 
-//    /**
-//     * Test of setFechaAlta method, of class Libro.
-//     */
-//    @Test
-//    public void testSetFechaAlta() {
-//        System.out.println("setFechaAlta");
-//        Date fechaAlta = null;
-//        Libro instance = new Libro();
-//        instance.setFechaAlta(fechaAlta);
-//        // TODO review the generated test code and remove the default call to fail.
-//        //fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getIsbn method, of class Libro.
-//     */
-//    @Test
-//    public void testGetIsbn() {
-//        System.out.println("getIsbn");
-//        Libro instance = new Libro();
-//        String expResult = "";
-//        String result = instance.getIsbn();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        //fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of setIsbn method, of class Libro.
-//     */
-//    @Test
-//    public void testSetIsbn() {
-//        System.out.println("setIsbn");
-//        String isbn = "";
-//        Libro instance = new Libro();
-//        instance.setIsbn(isbn);
-//        // TODO review the generated test code and remove the default call to fail.
-//        //fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getNumDisponibles method, of class Libro.
-//     */
+    /**
+     * Test of setIsbn method, of class Libro.
+     */
+    @Test
+    public void testSetIsbn() {
+        System.out.println("setIsbn");
+        String isbn = "Isbnprueba";
+        Libro instance = Mockito.mock(Libro.class);
+        instance.setIsbn(isbn);
+        Mockito.verify(instance).setIsbn(isbn);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+
 //    @Test
 //    public void testGetNumDisponibles() {
 //        System.out.println("getNumDisponibles");
@@ -297,5 +274,4 @@ public class LibroTest {
 //        // TODO review the generated test code and remove the default call to fail.
 //        //fail("The test case is a prototype.");
 //    }
-
 }
