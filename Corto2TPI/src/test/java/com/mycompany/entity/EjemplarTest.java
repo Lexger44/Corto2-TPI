@@ -12,16 +12,20 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.Mockito;
+import java.util.Set;
 
 /**
  *
  * @author Chris Oliva
  */
+
 public class EjemplarTest {
     static Ejemplar registro = new Ejemplar();
     Date FechaAdquirido ;
     Date FechaDevolver ;
     Date FechaPrestar;
+    
+    
     
     
     public EjemplarTest() {
@@ -52,7 +56,12 @@ public class EjemplarTest {
         
         registro.setObservaciones("Se presto un libro nuevo");
         
-      
+        registro.setLibroId(new Libro(1));
+        
+        registro.setUsuarioId(new Usuario(1L));
+        
+        
+        
         
     }
     
@@ -249,12 +258,11 @@ public class EjemplarTest {
     @Test
     public void testGetLibroId() {
         System.out.println("getLibroId");
-        Ejemplar instance = new Ejemplar();
-        Libro expResult = null;
-        Libro result = instance.getLibroId();
+       
+        Libro expResult = this.registro.getLibroId();
+        Libro result = this.registro.getLibroId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+  
     }
 
     /**
@@ -263,11 +271,11 @@ public class EjemplarTest {
     @Test
     public void testSetLibroId() {
         System.out.println("setLibroId");
-        Libro libroId = null;
-        Ejemplar instance = new Ejemplar();
+        Libro libroId = new Libro(1);
+        Ejemplar instance = Mockito.mock(Ejemplar.class);
         instance.setLibroId(libroId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Mockito.verify(instance).setLibroId(libroId);
+
     }
 
     /**
@@ -275,13 +283,14 @@ public class EjemplarTest {
      */
     @Test
     public void testGetUsuarioId() {
+        
         System.out.println("getUsuarioId");
-        Ejemplar instance = new Ejemplar();
-        Usuario expResult = null;
-        Usuario result = instance.getUsuarioId();
+        Usuario UsuarioId = new Usuario(1L);
+       
+        Usuario expResult = UsuarioId;
+        Usuario result = this.registro.getUsuarioId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -290,11 +299,11 @@ public class EjemplarTest {
     @Test
     public void testSetUsuarioId() {
         System.out.println("setUsuarioId");
-        Usuario usuarioId = null;
-        Ejemplar instance = new Ejemplar();
+        Usuario usuarioId = new Usuario(1L);
+        Ejemplar instance = Mockito.mock(Ejemplar.class);
         instance.setUsuarioId(usuarioId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Mockito.verify(instance).setUsuarioId(usuarioId);
+
     }
 
     /**
@@ -303,12 +312,12 @@ public class EjemplarTest {
     @Test
     public void testGetHistoricoSet() {
         System.out.println("getHistoricoSet");
-        Ejemplar instance = new Ejemplar();
-        Set<Historico> expResult = null;
-        Set<Historico> result = instance.getHistoricoSet();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Ejemplar instance = Mockito.mock(Ejemplar.class);
+                
+        Set<Historico> expResult = Mockito.mock(Set.class);
+        Mockito.when(instance.getHistoricoSet()).thenReturn(expResult);
+   
+  
     }
 
     /**
@@ -317,11 +326,11 @@ public class EjemplarTest {
     @Test
     public void testSetHistoricoSet() {
         System.out.println("setHistoricoSet");
-        Set<Historico> historicoSet = null;
-        Ejemplar instance = new Ejemplar();
+        Set<Historico> historicoSet = Mockito.mock(Set.class);;
+        Ejemplar instance = Mockito.mock(Ejemplar.class);
         instance.setHistoricoSet(historicoSet);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Mockito.verify(instance).setHistoricoSet(historicoSet);
+      
     }
 
     /**
@@ -330,12 +339,11 @@ public class EjemplarTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Ejemplar instance = new Ejemplar();
-        String expResult = "";
+        Ejemplar instance = new Ejemplar(1);
+        String expResult = "com.mycompany.entity.Ejemplar[ id=1 ]";
         String result = instance.toString();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+      
     }
     
 }
