@@ -33,6 +33,9 @@ public class ReservaTest {
         Date fechaI = new Date(121, 10, 11,16,30,10);
         System.out.println(DateFormat.getDateInstance().format(fechaI));
         registro.setFecha(fechaI);
+        registro.setLibroId(new Libro(1));
+        registro.setUsuarioId(new Usuario(9L));
+             
     }
     
     @AfterAll
@@ -133,60 +136,66 @@ public class ReservaTest {
         Mockito.verify(instance).setFechaFin(fechaFin);
     }
 
-//    /**
-//     * Test of getLibroId method, of class Reserva.
-//     */
-//    @Test
-//    public void testGetLibroId() {
-//        System.out.println("getLibroId");
-//        Libro expResult = 9L;
-//        Libro result = this.registro.LibroId;
-//        assertEquals(expResult, result);
-//    }
-//
-//    /**
-//     * Test of setLibroId method, of class Reserva.
-//     */
-//    @Test
-//    public void testSetLibroId() {
-//        System.out.println("setLibroId");
-//        String libroId = 9L;
-//        Reserva instance = Mockito.mock(Reserva.class);
-//        instance.setLibroId(libroId);
-//        Mockito.verify(instance).setLibroId(libroId);
-//    }
+    /**
+     * Test of getLibroId method, of class Reserva.
+     */
+    @Test
+    public void testGetLibroId() {
+        System.out.println("getLibroId");
+        Libro expResult = this.registro.getLibroId();
+        Libro result = this.registro.getLibroId();
+        assertEquals(expResult, result);
+    }
 
-//    /**
-//     * Test of getUsuarioId method, of class Reserva.
-//     */
-//    @Test
-//    public void testGetUsuarioId() {
-//        System.out.println("getUsuarioId");
-//        Reserva expResult = registro;
-//        Reserva result = instance.getUsuarioId();
-//        assertEquals(expResult, result);
-//    }
-//
-//    /**
-//     * Test of setUsuarioId method, of class Reserva.
-//     */
-//    @Test
-//    public void testSetUsuarioId() {
-//        System.out.println("setUsuarioId");
-//        Reserva usuarioId = null;
-//        Reserva instance = new Reserva();
-//        instance.setUsuarioId(usuarioId);
-//    }
+    /**
+     * Test of setLibroId method, of class Reserva.
+     */
+    @Test
+    public void testSetLibroId() {
+        System.out.println("setLibroId");
+        Libro libroId = new Libro(1);
+        Reserva instance = Mockito.mock(Reserva.class);
+        instance.setLibroId(libroId);
+        Mockito.verify(instance).setLibroId(libroId);
+    }
 
-//    /**
-//     * Test of toString method, of class Reserva.
-//     */
-//    @Test
-//    public void testToString() {
-//      System.out.println("toString");        
-//        String expResult = "com.mycompany.entity.Reserva[ id=" + id + " ]";
-//        String result = this.registro.toString();
-//        assertEquals(expResult, result);
-// 
-//    }
+    /**
+     * Test of getUsuarioId method, of class Reserva.
+     */
+    @Test
+    public void testGetUsuarioId() {
+        System.out.println("getUsuarioId");
+        Usuario UsuarioId = new Usuario(9L);
+        Usuario expResult = UsuarioId;
+        Usuario result = this.registro.getUsuarioId();
+        assertEquals(expResult, result);
+
+       
+    }
+
+    /**
+     * Test of setUsuarioId method, of class Reserva.
+     */
+    @Test
+    public void testSetUsuarioId() {
+        System.out.println("setUsuarioId");
+        Usuario usuarioId = new Usuario(9L);
+        Reserva instance = Mockito.mock(Reserva.class);
+        instance.setUsuarioId(usuarioId);
+        Mockito.verify(instance).setUsuarioId(usuarioId);
+    
+    }
+
+    /**
+     * Test of toString method, of class Reserva.
+     */
+    @Test
+    public void testToString() {
+      System.out.println("toString");    
+      Reserva instance = new Reserva(9L);
+        String expResult = "com.mycompany.entity.Reserva[ id=" + 9L + " ]";
+        String result = this.registro.toString();
+        assertEquals(expResult, result);
+ 
+    }
 }
