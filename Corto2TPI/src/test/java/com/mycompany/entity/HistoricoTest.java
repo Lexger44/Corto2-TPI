@@ -57,34 +57,37 @@ public class HistoricoTest {
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
-//
-//    /**
-//     * Test of getFechaDevolucion method, of class Historico.
-//     */
-//    @Test
-//    public void testGetFechaDevolucion() {
-//        System.out.println("getFechaDevolucion");
-//        Historico instance = new Historico();
-//        Date expResult = null;
-//        Date result = instance.getFechaDevolucion();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of setFechaDevolucion method, of class Historico.
-//     */
-//    @Test
-//    public void testSetFechaDevolucion() {
-//        System.out.println("setFechaDevolucion");
-//        Date fechaDevolucion = null;
-//        Historico instance = new Historico();
-//        instance.setFechaDevolucion(fechaDevolucion);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
+
+    /**
+     * Test of getFechaDevolucion method, of class Historico.
+     */
+    @Test
+    public void testGetFechaDevolucion() {
+        System.out.println("getFechaDevolucion");
+        Historico instance = new Historico();
+        Date hoy = new Date();
+        instance.setFechaDevolucion(hoy);
+        Date expResult = hoy;
+        Date result = instance.getFechaDevolucion();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setFechaDevolucion method, of class Historico.
+     */
+    @Test
+    public void testSetFechaDevolucion() {
+        System.out.println("setFechaDevolucion");
+        Historico instance = Mockito.mock(Historico.class);
+        Date fechaDevolucion = new Date();
+      //  Mockito.verify(instance).setFechaDevolucion(fechaDevolucion);
+        instance.setFechaDevolucion(fechaDevolucion);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
 //    /**
 //     * Test of getFechaDevolucionReal method, of class Historico.
 //     */

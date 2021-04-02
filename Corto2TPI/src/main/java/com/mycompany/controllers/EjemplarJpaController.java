@@ -72,13 +72,40 @@ public class EjemplarJpaController implements Serializable {
         }
     }
 
-    public void destroy(Ejemplar id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(int id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-           
-            em.remove(id.getId());
+            Ejemplar ejemplar;
+            try {
+                ejemplar = em.getReference(Ejemplar.class, id);
+                ejemplar.getId();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The ejemplar with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            Set<Historico> historicoSetOrphanCheck = ejemplar.getHistoricoSet();
+            for (Historico historicoSetOrphanCheckHistorico : historicoSetOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Ejemplar (" + ejemplar + ") cannot be destroyed since the Historico " + historicoSetOrphanCheckHistorico + " in its historicoSet field has a non-nullable ejemplarId field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Libro libroId = ejemplar.getLibroId();
+            if (libroId != null) {
+                libroId.getEjemplarSet().remove(ejemplar);
+                libroId = em.merge(libroId);
+            }
+            Usuario usuarioId = ejemplar.getUsuarioId();
+            if (usuarioId != null) {
+                usuarioId.getEjemplarSet().remove(ejemplar);
+                usuarioId = em.merge(usuarioId);
+            }
+            em.remove(ejemplar);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -87,6 +114,50 @@ public class EjemplarJpaController implements Serializable {
         }
     }
 
-    
+    public List<Ejemplar> findEjemplarEntities() {
+        return findEjemplarEntities(true, -1, -1);
+    }
+
+    public List<Ejemplar> findEjemplarEntities(int maxResults, int firstResult) {
+        return findEjemplarEntities(false, maxResults, firstResult);
+    }
+
+    private List<Ejemplar> findEjemplarEntities(boolean all, int maxResults, int firstResult) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Ejemplar.class));
+            Query q = em.createQuery(cq);
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public Ejemplar findEjemplar(Long id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Ejemplar.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    public int getEjemplarCount() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            Root<Ejemplar> rt = cq.from(Ejemplar.class);
+            cq.select(em.getCriteriaBuilder().count(rt));
+            Query q = em.createQuery(cq);
+            return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
     
 }
