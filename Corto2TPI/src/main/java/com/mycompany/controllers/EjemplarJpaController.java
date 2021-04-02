@@ -114,50 +114,25 @@ public class EjemplarJpaController implements Serializable {
         }
     }
 
-    public List<Ejemplar> findEjemplarEntities() {
-        return findEjemplarEntities(true, -1, -1);
+    public List<Ejemplar> EjemplarEntities() {
+        return findEjemplarEntities();
     }
 
-    public List<Ejemplar> findEjemplarEntities(int maxResults, int firstResult) {
-        return findEjemplarEntities(false, maxResults, firstResult);
-    }
 
-    private List<Ejemplar> findEjemplarEntities(boolean all, int maxResults, int firstResult) {
+
+    private List<Ejemplar> findEjemplarEntities() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Ejemplar.class));
             Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
+
             return q.getResultList();
         } finally {
             em.close();
         }
     }
 
-    public Ejemplar findEjemplar(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Ejemplar.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
-    public int getEjemplarCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Ejemplar> rt = cq.from(Ejemplar.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
+ 
     
 }
