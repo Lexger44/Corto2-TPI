@@ -11,10 +11,15 @@ import com.mycompany.entity.Usuario;
 import java.util.List;
 import java.util.Set;
 import javax.enterprise.inject.Any;
+import javax.management.RuntimeErrorException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -84,10 +89,9 @@ public class MultaJpaControllerTest {
      * Test of edit method, of class MultaJpaController.
      */
     @Test
-    public void testEdit() throws Exception {
+    public void testEdit() throws NonexistentEntityException, Exception {
         System.out.println("edit");
         Multa mockMulta = Mockito.mock(Multa.class);
-        Multa mockMulta2 = Mockito.mock(Multa.class);
         EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
         MultaJpaController instance = new MultaJpaController(mockEMF);
         EntityManager mockEM = Mockito.mock(EntityManager.class);
@@ -96,12 +100,14 @@ public class MultaJpaControllerTest {
         Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
         
         Mockito.when(mockEM.find(Multa.class, mockMulta.getId())).thenReturn(mockMulta);
-        
-        
+      
+               
         Usuario mockUsuario = Mockito.mock(Usuario.class);
+
         Mockito.when(mockMulta.getUsuarioId()).thenReturn(mockUsuario);
-        
-        instance.edit(mockMulta2);
+        Set<Multa> mockMultaSet = Mockito.mock(Set.class);
+        mockUsuario.setMultaSet(mockMultaSet);
+        instance.edit(mockMulta);
 
     }
 
@@ -109,7 +115,7 @@ public class MultaJpaControllerTest {
      * Test of destroy method, of class MultaJpaController.
      */
     @Test
-    public void testDestroy() throws Exception {
+    public void testDestroy() throws NonexistentEntityException {
         System.out.println("destroy");
         Multa mockMulta = Mockito.mock(Multa.class);
         Long id = mockMulta.getId();
@@ -121,47 +127,53 @@ public class MultaJpaControllerTest {
         Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
         Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
         Mockito.when(mockEM.getReference(Multa.class, mockMulta.getId())).thenReturn(mockMulta);
-        
-        
-        
+             
         Usuario mockUsuario = Mockito.mock(Usuario.class);
         Mockito.when(mockMulta.getUsuarioId()).thenReturn(mockUsuario);
         Set<Multa> mockMultaSet = Mockito.mock(Set.class);
+        
+        
         //Mockito.when()
         
         instance.destroy(id);
 
     }
-//
-//    /**
-//     * Test of findMultaEntities method, of class MultaJpaController.
-//     */
-//    @Test
-//    public void testFindMultaEntities_0args() {
-//        System.out.println("findMultaEntities");
-//        MultaJpaController instance = null;
-//        List<Multa> expResult = null;
-//        List<Multa> result = instance.findMultaEntities();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of findMultaEntities method, of class MultaJpaController.
-//     */
-//    @Test
-//    public void testFindMultaEntities_int_int() {
-//        System.out.println("findMultaEntities");
-//        int maxResults = 0;
-//        int firstResult = 0;
-//        MultaJpaController instance = null;
-//        List<Multa> expResult = null;
-//        List<Multa> result = instance.findMultaEntities(maxResults, firstResult);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
+    /**
+     * Test of findMultaEntities method, of class MultaJpaController.
+     */
+    @Test
+    public void testFindMultaEntities_int_int() {
+        System.out.println("findMultaEntities");
+        Multa mockMulta = Mockito.mock(Multa.class);
+        Long id = mockMulta.getId();
+        mockMulta.setId(id);
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        MultaJpaController instance = new MultaJpaController(mockEMF);
+        EntityManager mockEM = Mockito.mock(EntityManager.class);
+        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
+        CriteriaQuery mockCQ = Mockito.mock(CriteriaQuery.class);
+        CriteriaBuilder mockCB = Mockito.mock(CriteriaBuilder.class);
+        
+        Mockito.when(mockEM.getCriteriaBuilder()).thenReturn(mockCB);
+        Mockito.when(mockCB.createQuery()).thenReturn(mockCQ);
+        
+        TypedQuery mockTQ = Mockito.mock(TypedQuery.class);
+        Mockito.when(mockEM.createQuery(mockCQ)).thenReturn(mockTQ);       
+        
+        List<Multa> mockList = Mockito.mock(List.class);
+        mockTQ.setMaxResults(mockList.size());
+        mockTQ.setFirstResult(0);
+        
+        int maxResults = mockList.size();
+        int firstResult = 0;
+
+        List <Multa> expResult = mockTQ.getResultList();
+        List<Multa> result = instance.findMultaEntities(maxResults, firstResult);
+        assertEquals(expResult, result);
+
+    }
+    
 //
 //    /**
 //     * Test of findMulta method, of class MultaJpaController.

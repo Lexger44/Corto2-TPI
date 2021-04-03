@@ -119,10 +119,6 @@ public class MultaJpaController implements Serializable {
         }
     }
 
-    public List<Multa> findMultaEntities() {
-        return findMultaEntities(true, -1, -1);
-    }
-
     public List<Multa> findMultaEntities(int maxResults, int firstResult) {
         return findMultaEntities(false, maxResults, firstResult);
     }
