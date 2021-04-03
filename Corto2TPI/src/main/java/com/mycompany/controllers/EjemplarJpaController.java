@@ -28,7 +28,7 @@ public class EjemplarJpaController implements Serializable {
     public EjemplarJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
+    public EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -131,6 +131,10 @@ public class EjemplarJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+
+    List<Ejemplar> findEjemplarEntities(int maxResults, int firstResult) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
  
