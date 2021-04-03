@@ -23,8 +23,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class ReservaTest {
     static Reserva registro = new Reserva();
+    Date fechaI;
     
     public ReservaTest() {
+        fechaI = new Date(121, 10, 11, 16, 30, 10);
     }
     
     @BeforeAll
@@ -33,8 +35,9 @@ public class ReservaTest {
         Date fechaI = new Date(121, 10, 11,16,30,10);
         System.out.println(DateFormat.getDateInstance().format(fechaI));
         registro.setFecha(fechaI);
+        registro.setFechaFin(fechaI);
         registro.setLibroId(new Libro(1));
-        registro.setUsuarioId(new Usuario(9L));
+        registro.setUsuarioId(new Usuario(1L));
              
     }
     
@@ -50,8 +53,8 @@ public class ReservaTest {
     public void testGetId() {
         System.out.println("getId");
         Reserva instance = new Reserva();
-        instance.setId(9L);
-        Long expResult = 9L;
+        instance.setId(1L);
+        Long expResult = 1L;
         Long result = instance.getId();
         assertEquals(expResult, result);
     }
@@ -96,7 +99,7 @@ public class ReservaTest {
     @Test
     public void testGetFecha() {
         System.out.println("getFecha");
-        Date expResult = (Date) Reserva_.fecha;
+        Date expResult = fechaI;
         Date result = this.registro.getFecha();
         assertEquals(expResult, result);
     }
@@ -107,7 +110,7 @@ public class ReservaTest {
     @Test
     public void testSetFecha() {
         System.out.println("setFecha");
-        Date fecha = (Date) Reserva_.fecha;
+        Date fecha = fechaI;
         Reserva instance = Mockito.mock(Reserva.class);
         instance.setFecha(fecha);
         Mockito.verify(instance).setFecha(fecha);
@@ -119,7 +122,7 @@ public class ReservaTest {
     @Test
     public void testGetFechaFin() {
         System.out.println("getFechaFin");
-        Date expResult = (Date) Reserva_.fechaFin;
+        Date expResult = fechaI;
         Date result = this.registro.getFechaFin();
         assertEquals(expResult, result);
     }
@@ -130,7 +133,7 @@ public class ReservaTest {
     @Test
     public void testSetFechaFin() {
         System.out.println("setFechaFin");
-        Date fechaFin = (Date) Reserva_.fechaFin;
+        Date fechaFin = fechaI;
         Reserva instance = Mockito.mock(Reserva.class);
         instance.setFechaFin(fechaFin);
         Mockito.verify(instance).setFechaFin(fechaFin);
@@ -165,7 +168,7 @@ public class ReservaTest {
     @Test
     public void testGetUsuarioId() {
         System.out.println("getUsuarioId");
-        Usuario UsuarioId = new Usuario(9L);
+        Usuario UsuarioId = new Usuario(1L);
         Usuario expResult = UsuarioId;
         Usuario result = this.registro.getUsuarioId();
         assertEquals(expResult, result);
@@ -179,7 +182,7 @@ public class ReservaTest {
     @Test
     public void testSetUsuarioId() {
         System.out.println("setUsuarioId");
-        Usuario usuarioId = new Usuario(9L);
+        Usuario usuarioId = new Usuario(1L);
         Reserva instance = Mockito.mock(Reserva.class);
         instance.setUsuarioId(usuarioId);
         Mockito.verify(instance).setUsuarioId(usuarioId);
@@ -192,9 +195,9 @@ public class ReservaTest {
     @Test
     public void testToString() {
       System.out.println("toString");    
-      Reserva instance = new Reserva(9L);
-        String expResult = "com.mycompany.entity.Reserva[ id=" + 9L + " ]";
-        String result = this.registro.toString();
+      Reserva instance = new Reserva(1L);
+        String expResult = "com.mycompany.entity.Reserva[ id=1 ]";
+        String result = instance.toString();
         assertEquals(expResult, result);
  
     }

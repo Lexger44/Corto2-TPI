@@ -6,12 +6,20 @@
 package com.mycompany.controllers;
 
 import com.mycompany.entity.Reserva;
+import com.mycompany.controllers.exceptions.NonexistentEntityException;
+import com.mycompany.entity.Libro;
+import com.mycompany.entity.Usuario;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.TypedQuery;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -24,18 +32,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class ReservaJpaControllerTest {
     
-    static EntityManagerFactory mockEmf;
-    static ReservaJpaControllerTest registro;
-    static Reserva ReservaObject;
-    
+   
     public ReservaJpaControllerTest() {
     }
     
     @BeforeAll
     public static void setUpClass() {
-        mockEmf = Mockito.mock(EntityManagerFactory.class);
-//        registro = new ReservaJpaControllerTest(mockEmf);
-//        ReservaObject = new ReservaObject(1L);
+      
     }
     
     @AfterAll
@@ -48,11 +51,12 @@ public class ReservaJpaControllerTest {
     @Test
     public void testGetEntityManager() {
         System.out.println("getEntityManager");
-        ReservaJpaController  instance = null;
-        EntityManager expResult = null;
-//        EntityManager result = instance.getEntityManager();
-//        assertEquals(expResult, result);
-  
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        ReservaJpaController instance = new ReservaJpaController(mockEMF);
+        EntityManager expResult = Mockito.mock(EntityManager.class);
+        Mockito.when(instance.getEntityManager()).thenReturn(expResult);
+        EntityManager result = instance.getEntityManager();
+        assertEquals(expResult, result);
     }
 
     /**
@@ -61,17 +65,27 @@ public class ReservaJpaControllerTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        Reserva reserva = null;
-        ReservaJpaController instance = null;
-//        instance.create(reserva);
-   
+        Reserva reserva = new Reserva();
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        EntityTransaction mockTX = Mockito.mock(EntityTransaction.class);
+        EntityManager mockEM = Mockito.mock(EntityManager.class);
+        Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
+        ReservaJpaController instance = new ReservaJpaController(mockEMF);
+        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
+        reserva.setUsuarioId(new Usuario(1L));
+        Usuario mockUsuario = Mockito.mock(Usuario.class);
+        Mockito.when(mockEM.getReference(Usuario.class, 1L)).thenReturn(mockUsuario);
+//        reserva.setLibroId(new Libro(1));
+//        Libro mockLibro = Mockito.mock(Libro.class);
+//        Mockito.when(mockEM.getReference(Libro.class, 1)).thenReturn(mockLibro);
+        instance.create(reserva);
     }
 
     /**
      * Test of edit method, of class ReservaJpaController.
      */
     @Test
-    public void testEdit() throws Exception {
+    public void testEdit() throws Exception, NonexistentEntityException {
         System.out.println("edit");
         Reserva reserva = null;
         ReservaJpaController instance = null;
@@ -83,12 +97,25 @@ public class ReservaJpaControllerTest {
      * Test of destroy method, of class ReservaJpaController.
      */
     @Test
-    public void testDestroy() throws Exception {
+    public void testDestroy() throws Exception, NonexistentEntityException {
         System.out.println("destroy");
-        Long id = null;
-        ReservaJpaController instance = null;
-//        instance.destroy(id);
-  
+        Reserva mockReserva = Mockito.mock(Reserva.class);
+        Long id = mockReserva.getId();
+        mockReserva.setId(id);
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        ReservaJpaController instance = new ReservaJpaController(mockEMF);
+        EntityManager mockEM = Mockito.mock(EntityManager.class);
+        EntityTransaction mockTX = Mockito.mock(EntityTransaction.class);
+        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
+        Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
+        Mockito.when(mockEM.getReference(Reserva.class, mockReserva.getId())).thenReturn(mockReserva);
+        Usuario mockUsuario = Mockito.mock(Usuario.class);
+        Mockito.when(mockReserva.getUsuarioId()).thenReturn(mockUsuario);
+        Set<Reserva> mockReservaSet = Mockito.mock(Set.class);
+        Libro mockLibro = Mockito.mock(Libro.class);
+        Mockito.when(mockReserva.getLibroId()).thenReturn(mockLibro);
+//        Set<Reserva> mockReservaSet = Mockito.mock(Set.class
+        instance.destroy(id);
     }
 
     /**
@@ -110,13 +137,28 @@ public class ReservaJpaControllerTest {
     @Test
     public void testFindReservaEntities_int_int() {
         System.out.println("findReservaEntities");
-        int maxResults = 0;
+        Reserva mockReserva = Mockito.mock(Reserva.class);
+        Long id = mockReserva.getId();
+        mockReserva.setId(id);
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        ReservaJpaController instance = new ReservaJpaController(mockEMF);
+        EntityManager mockEM = Mockito.mock(EntityManager.class);
+        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
+        CriteriaQuery mockCQ = Mockito.mock(CriteriaQuery.class);
+        CriteriaBuilder mockCB = Mockito.mock(CriteriaBuilder.class);   
+        Mockito.when(mockEM.getCriteriaBuilder()).thenReturn(mockCB);
+        Mockito.when(mockCB.createQuery()).thenReturn(mockCQ);
+        TypedQuery mockTQ = Mockito.mock(TypedQuery.class);
+        Mockito.when(mockEM.createQuery(mockCQ)).thenReturn(mockTQ);       
+        
+        List<Reserva> mockList = Mockito.mock(List.class);
+        mockTQ.setMaxResults(mockList.size());
+        mockTQ.setFirstResult(0);
+        int maxResults = mockList.size();
         int firstResult = 0;
-        ReservaJpaController instance = null;
-        List<Reserva> expResult = null;
-//        List<Reserva> result = instance.findReservaEntities(maxResults, firstResult);
-//        assertEquals(expResult, result);
-   
+        List <Reserva> expResult = mockTQ.getResultList();
+        List<Reserva> result = instance.findReservaEntities(maxResults, firstResult);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -144,11 +186,5 @@ public class ReservaJpaControllerTest {
 //        int result = instance.getReservaCount();
 //        assertEquals(expResult, result);
 //   
-    }
-
-    private static class ReservaJpaController {
-
-        public ReservaJpaController() {
-        }
-    }
+    }  
 }
