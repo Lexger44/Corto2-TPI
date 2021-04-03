@@ -11,6 +11,7 @@ import java.util.List;
 import javax.management.RuntimeErrorException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityTransaction;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -90,15 +91,15 @@ public class BibliotecarioJpaControllerTest {
         Mockito.verify(mockEm).close();
         RuntimeErrorException mockRx = Mockito.mock(RuntimeErrorException.class);
         
-        Mockito.when(mockEm.merge(bibliotecarioObject)).thenThrow(mockRx);
-        Bibliotecario mockB = Mockito.mock(Bibliotecario.class);        
+        Mockito.when(mockEm.merge(bibliotecarioObject)).thenThrow(mockRx);                
         try {
             registro.edit(bibliotecarioObject);
         } catch (Exception e) {
             System.out.println(e);
         }
                
-        Mockito.when(mockRx.getLocalizedMessage()).thenReturn("Excepcion esperada");
+        String message = "Excepcion esperada";
+        Mockito.when(mockRx.getLocalizedMessage()).thenReturn(message);
 
         try {
             registro.edit(bibliotecarioObject);
@@ -113,11 +114,30 @@ public class BibliotecarioJpaControllerTest {
     @Test
     public void testDestroy() throws Exception {
         System.out.println("destroy");
-        Long id = null;
-        BibliotecarioJpaController instance = null;
-        instance.destroy(id);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        EntityManager mockEm = Mockito.mock(EntityManager.class);
+        EntityTransaction mockTx = Mockito.mock(EntityTransaction.class);
+        Bibliotecario mockB = Mockito.mock(Bibliotecario.class);
+        Mockito.when(mockEmf.createEntityManager()).thenReturn(mockEm);
+        Mockito.when(mockEm.getTransaction()).thenReturn(mockTx);
+        Mockito.when(mockEm.getReference(Bibliotecario.class, 1L)).thenReturn(mockB);
+        Mockito.when(mockB.getId()).thenReturn(1L);
+        
+        registro.destroy(1L);
+        
+        Mockito.verify(mockEm).remove(mockB);
+        Mockito.verify(mockEm).close();
+        Mockito.verify(mockEm).getReference(Bibliotecario.class, 1L);
+        
+        Mockito.when(mockB.getId()).thenThrow(EntityNotFoundException.class);
+        
+        try{
+            registro.destroy(1L);
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
+        
+        
+        
     }
 
     /**
@@ -126,28 +146,14 @@ public class BibliotecarioJpaControllerTest {
     @Test
     public void testFindBibliotecario() {
         System.out.println("findBibliotecario");
-        Long id = null;
-        BibliotecarioJpaController instance = null;
-        Bibliotecario expResult = null;
-        Bibliotecario result = instance.findBibliotecario(id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getBibliotecarioCount method, of class
-     * BibliotecarioJpaController.
-     */
-    @Test
-    public void testGetBibliotecarioCount() {
-        System.out.println("getBibliotecarioCount");
-        BibliotecarioJpaController instance = null;
-        int expResult = 0;
-        int result = instance.getBibliotecarioCount();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        EntityManager mockEm = Mockito.mock(EntityManager.class);
+        Mockito.when(mockEmf.createEntityManager()).thenReturn(mockEm);
+        Mockito.when(mockEm.find(Bibliotecario.class, 1L)).thenReturn(this.bibliotecarioObject);
+        
+        Bibliotecario result = registro.findBibliotecario(1L);
+        
+        assertEquals(result, this.bibliotecarioObject);
+        Mockito.verify(mockEm).close();
     }
 
 }

@@ -97,18 +97,5 @@ public class BibliotecarioJpaController implements Serializable {
             em.close();
         }
     }
-
-    public int getBibliotecarioCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Bibliotecario> rt = cq.from(Bibliotecario.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
     
 }
