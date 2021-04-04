@@ -87,10 +87,25 @@ public class ReservaJpaControllerTest {
     @Test
     public void testEdit() throws Exception, NonexistentEntityException {
         System.out.println("edit");
-        Reserva reserva = null;
-        ReservaJpaController instance = null;
-//        instance.edit(reserva);
-   
+        Reserva mockReserva = Mockito.mock(Reserva.class);
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        ReservaJpaController instance = new ReservaJpaController(mockEMF);
+        EntityManager mockEM = Mockito.mock(EntityManager.class);
+        EntityTransaction mockTX = Mockito.mock(EntityTransaction.class);
+        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
+        Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);    
+        Mockito.when(mockEM.find(Reserva.class, mockReserva.getId())).thenReturn(mockReserva);
+            
+        Usuario mockUsuario = Mockito.mock(Usuario.class);
+        Mockito.when(mockReserva.getUsuarioId()).thenReturn(mockUsuario);
+        Set<Reserva> mockReservaSet = Mockito.mock(Set.class);
+        mockUsuario.setReservaSet(mockReservaSet);
+        
+        Libro mockLibro = Mockito.mock(Libro.class);
+        Mockito.when(mockReserva.getLibroId()).thenReturn(mockLibro);
+//        Set<Reserva> mockReservaSet = Mockito.mock(Set.class);
+        mockLibro.setReservaSet(mockReservaSet);
+        instance.edit(mockReserva);
     }
 
     /**
@@ -116,19 +131,6 @@ public class ReservaJpaControllerTest {
         Mockito.when(mockReserva.getLibroId()).thenReturn(mockLibro);
 //        Set<Reserva> mockReservaSet = Mockito.mock(Set.class
         instance.destroy(id);
-    }
-
-    /**
-     * Test of findReservaEntities method, of class ReservaJpaController.
-     */
-    @Test
-    public void testFindReservaEntities_0args() {
-        System.out.println("findReservaEntities");
-        ReservaJpaController instance = null;
-        List<Reserva> expResult = null;
-//        List<Reserva> result = instance.findReservaEntities();
-//        assertEquals(expResult, result);
-//  
     }
 
     /**
@@ -167,12 +169,16 @@ public class ReservaJpaControllerTest {
     @Test
     public void testFindReserva() {
         System.out.println("findReserva");
-        Long id = null;
-        ReservaJpaController instance = null;
+        Reserva mockReserva = Mockito.mock(Reserva.class);
+        Long id = mockReserva.getId();
+        mockReserva.setId(id);
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        ReservaJpaController instance = new ReservaJpaController(mockEMF);
+        EntityManager mockEM = Mockito.mock(EntityManager.class);
+        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
         Reserva expResult = null;
-//        Reserva result = instance.findReserva(id);
-//        assertEquals(expResult, result);
-//        
+        Reserva result = instance.findReserva(id);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -181,10 +187,8 @@ public class ReservaJpaControllerTest {
     @Test
     public void testGetReservaCount() {
         System.out.println("getReservaCount");
-        ReservaJpaController instance = null;
-        int expResult = 0;
-//        int result = instance.getReservaCount();
-//        assertEquals(expResult, result);
-//   
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        ReservaJpaController instance = new ReservaJpaController(mockEMF);
+        EntityManager mockEM = Mockito.mock(EntityManager.class);
     }  
 }
