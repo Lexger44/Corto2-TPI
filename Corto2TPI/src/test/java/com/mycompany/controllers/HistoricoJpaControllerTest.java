@@ -68,15 +68,15 @@ public class HistoricoJpaControllerTest {
         HistoricoJpaController instance = new HistoricoJpaController(mockEMF);
         Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
         Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
-        Mockito .when(historico.getEjemplarId()).thenReturn(ejemplar);
-        instance.create(historico);
-        
-        Mockito.when(historico.getUsuarioId()).thenReturn(usuario);
-        
-        instance.create(historico);
-        
         Mockito.when(historico.getEjemplarId()).thenReturn(ejemplar);
-        
+        instance.create(historico);
+
+        Mockito.when(historico.getUsuarioId()).thenReturn(usuario);
+
+        instance.create(historico);
+
+        Mockito.when(historico.getEjemplarId()).thenReturn(ejemplar);
+
         instance.create(historico);
         Mockito.when(historico.getUsuarioId()).thenReturn(usuario);
         instance.create(historico);
@@ -85,58 +85,37 @@ public class HistoricoJpaControllerTest {
 //        fail("The test case is a prototype.");
     }
 
-//    /**
-//     * Test of edit method, of class HistoricoJpaController.
-//     */
-//    @Test
-//    public void testEdit() throws Exception {
-//        System.out.println("edit");
-//        Historico historico = null;
-//        HistoricoJpaController instance = null;
-//        instance.edit(historico);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of destroy method, of class HistoricoJpaController.
-//     */
-//    @Test
-//    public void testDestroy() throws Exception {
-//        System.out.println("destroy");
-//        Long id = null;
-//        HistoricoJpaController instance = null;
-//        instance.destroy(id);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of HistoricoEntities method, of class HistoricoJpaController.
-//     */
-//    @Test
-//    public void testHistoricoEntities() {
-//        System.out.println("HistoricoEntities");
-//        HistoricoJpaController instance = null;
-//        List<Historico> expResult = null;
-//        List<Historico> result = instance.HistoricoEntities();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of findHistorico method, of class HistoricoJpaController.
-//     */
-//    @Test
-//    public void testFindHistorico() {
-//        System.out.println("findHistorico");
-//        Long id = null;
-//        HistoricoJpaController instance = null;
-//        Historico expResult = null;
-//        Historico result = instance.findHistorico(id);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    /**
+     * Test of edit method, of class HistoricoJpaController.
+     */
+    @Test
+    public void testEdit() throws Exception {
+        System.out.println("edit");
+        Historico historico = Mockito.mock(Historico.class);
+        HistoricoJpaController instance = new HistoricoJpaController(mockEMF);
+        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
+        Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
+            
+        instance.edit(historico);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of destroy method, of class HistoricoJpaController.
+     */
+    @Test
+    public void testDestroy() throws Exception {
+        System.out.println("destroy");
+        Historico historico = Mockito.mock(Historico.class);
+        HistoricoJpaController instance = new HistoricoJpaController(mockEMF);
+        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
+        Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
+            
+        instance.destroy(historico);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+
 }

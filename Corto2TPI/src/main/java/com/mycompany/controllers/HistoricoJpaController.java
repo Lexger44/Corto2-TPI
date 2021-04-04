@@ -68,13 +68,7 @@ public class HistoricoJpaController implements Serializable {
             historico = em.merge(historico);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = historico.getId();
-                if (findHistorico(id) == null) {
-                    throw new NonexistentEntityException("The historico with id " + id + " no longer exists.");
-                }
-            }
+
             throw ex;
         } finally {
             if (em != null) {
@@ -97,33 +91,7 @@ public class HistoricoJpaController implements Serializable {
         }
     }
 
-    public List<Historico> HistoricoEntities() {
-        return findHistoricoEntities();
-    }
 
-
-
-    private List<Historico> findHistoricoEntities() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Historico.class));
-            Query q = em.createQuery(cq);
-
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public Historico findHistorico(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Historico.class, id);
-        } finally {
-            em.close();
-        }
-    }
 
     
     
