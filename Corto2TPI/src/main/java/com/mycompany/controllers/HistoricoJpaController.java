@@ -24,10 +24,12 @@ import javax.persistence.EntityManagerFactory;
  */
 public class HistoricoJpaController implements Serializable {
 
+    private EntityManagerFactory emf = null;
+    
     public HistoricoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
+    
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -49,14 +51,7 @@ public class HistoricoJpaController implements Serializable {
                 historico.setUsuarioId(usuarioId);
             }
             em.persist(historico);
-            if (ejemplarId != null) {
-                ejemplarId.getHistoricoSet().add(historico);
-                ejemplarId = em.merge(ejemplarId);
-            }
-            if (usuarioId != null) {
-                usuarioId.getHistoricoSet().add(historico);
-                usuarioId = em.merge(usuarioId);
-            }
+
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -70,36 +65,7 @@ public class HistoricoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Historico persistentHistorico = em.find(Historico.class, historico.getId());
-            Ejemplar ejemplarIdOld = persistentHistorico.getEjemplarId();
-            Ejemplar ejemplarIdNew = historico.getEjemplarId();
-            Usuario usuarioIdOld = persistentHistorico.getUsuarioId();
-            Usuario usuarioIdNew = historico.getUsuarioId();
-            if (ejemplarIdNew != null) {
-                ejemplarIdNew = em.getReference(ejemplarIdNew.getClass(), ejemplarIdNew.getId());
-                historico.setEjemplarId(ejemplarIdNew);
-            }
-            if (usuarioIdNew != null) {
-                usuarioIdNew = em.getReference(usuarioIdNew.getClass(), usuarioIdNew.getId());
-                historico.setUsuarioId(usuarioIdNew);
-            }
             historico = em.merge(historico);
-            if (ejemplarIdOld != null && !ejemplarIdOld.equals(ejemplarIdNew)) {
-                ejemplarIdOld.getHistoricoSet().remove(historico);
-                ejemplarIdOld = em.merge(ejemplarIdOld);
-            }
-            if (ejemplarIdNew != null && !ejemplarIdNew.equals(ejemplarIdOld)) {
-                ejemplarIdNew.getHistoricoSet().add(historico);
-                ejemplarIdNew = em.merge(ejemplarIdNew);
-            }
-            if (usuarioIdOld != null && !usuarioIdOld.equals(usuarioIdNew)) {
-                usuarioIdOld.getHistoricoSet().remove(historico);
-                usuarioIdOld = em.merge(usuarioIdOld);
-            }
-            if (usuarioIdNew != null && !usuarioIdNew.equals(usuarioIdOld)) {
-                usuarioIdNew.getHistoricoSet().add(historico);
-                usuarioIdNew = em.merge(usuarioIdNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -117,28 +83,11 @@ public class HistoricoJpaController implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws NonexistentEntityException {
+    public void destroy(Historico historico) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Historico historico;
-            try {
-                historico = em.getReference(Historico.class, id);
-                historico.getId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The historico with id " + id + " no longer exists.", enfe);
-            }
-            Ejemplar ejemplarId = historico.getEjemplarId();
-            if (ejemplarId != null) {
-                ejemplarId.getHistoricoSet().remove(historico);
-                ejemplarId = em.merge(ejemplarId);
-            }
-            Usuario usuarioId = historico.getUsuarioId();
-            if (usuarioId != null) {
-                usuarioId.getHistoricoSet().remove(historico);
-                usuarioId = em.merge(usuarioId);
-            }
             em.remove(historico);
             em.getTransaction().commit();
         } finally {
@@ -148,24 +97,19 @@ public class HistoricoJpaController implements Serializable {
         }
     }
 
-    public List<Historico> findHistoricoEntities() {
-        return findHistoricoEntities(true, -1, -1);
+    public List<Historico> HistoricoEntities() {
+        return findHistoricoEntities();
     }
 
-    public List<Historico> findHistoricoEntities(int maxResults, int firstResult) {
-        return findHistoricoEntities(false, maxResults, firstResult);
-    }
 
-    private List<Historico> findHistoricoEntities(boolean all, int maxResults, int firstResult) {
+
+    private List<Historico> findHistoricoEntities() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Historico.class));
             Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
+
             return q.getResultList();
         } finally {
             em.close();
@@ -181,17 +125,6 @@ public class HistoricoJpaController implements Serializable {
         }
     }
 
-    public int getHistoricoCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Historico> rt = cq.from(Historico.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
+    
     
 }

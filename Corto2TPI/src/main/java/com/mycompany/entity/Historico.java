@@ -61,9 +61,7 @@ public class Historico implements Serializable {
     public Historico() {
     }
 
-    public Historico(Long id) {
-        this.id = id;
-    }
+
 
     public Long getId() {
         return id;
