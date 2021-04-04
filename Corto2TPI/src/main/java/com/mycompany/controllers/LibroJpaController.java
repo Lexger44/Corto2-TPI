@@ -188,44 +188,17 @@ public class LibroJpaController implements Serializable {
 //        }
     }
 
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Libro libro) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
-
-//        try {
-//            em = getEntityManager();
-//            em.getTransaction().begin();
-//            Libro libro;
-//            try {
-//                libro = em.getReference(Libro.class, id);
-//                libro.getId();
-//            } catch (EntityNotFoundException enfe) {
-//                throw new NonexistentEntityException("The libro with id " + id + " no longer exists.", enfe);
-//            }
-//            List<String> illegalOrphanMessages = null;
-//            Set<Ejemplar> ejemplarSetOrphanCheck = libro.getEjemplarSet();
-//            for (Ejemplar ejemplarSetOrphanCheckEjemplar : ejemplarSetOrphanCheck) {
-//                if (illegalOrphanMessages == null) {
-//                    illegalOrphanMessages = new ArrayList<String>();
-//                }
-//                illegalOrphanMessages.add("This Libro (" + libro + ") cannot be destroyed since the Ejemplar " + ejemplarSetOrphanCheckEjemplar + " in its ejemplarSet field has a non-nullable libroId field.");
-//            }
-//            Set<Reserva> reservaSetOrphanCheck = libro.getReservaSet();
-//            for (Reserva reservaSetOrphanCheckReserva : reservaSetOrphanCheck) {
-//                if (illegalOrphanMessages == null) {
-//                    illegalOrphanMessages = new ArrayList<String>();
-//                }
-//                illegalOrphanMessages.add("This Libro (" + libro + ") cannot be destroyed since the Reserva " + reservaSetOrphanCheckReserva + " in its reservaSet field has a non-nullable libroId field.");
-//            }
-//            if (illegalOrphanMessages != null) {
-//                throw new IllegalOrphanException(illegalOrphanMessages);
-//            }
-//            em.remove(libro);
-//            em.getTransaction().commit();
-//        } finally {
-//            if (em != null) {
-//                em.close();
-//            }
-//        }
-//    }
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();           
+            em.remove(libro);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 }

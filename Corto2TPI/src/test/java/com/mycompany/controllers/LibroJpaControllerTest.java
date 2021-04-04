@@ -5,12 +5,10 @@
  */
 package com.mycompany.controllers;
 
-import com.mycompany.entity.Ejemplar;
+import com.mycompany.controllers.exceptions.NonexistentEntityException;
+import com.mycompany.entity.Bibliotecario;
 import com.mycompany.entity.Libro;
-import com.mycompany.entity.Reserva;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.management.RuntimeErrorException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -29,25 +27,24 @@ import javax.persistence.EntityTransaction;
 @ExtendWith(MockitoExtension.class)
 public class LibroJpaControllerTest {
 
+    static EntityManagerFactory mockEMF;
+    static LibroJpaController registro;
+    static Libro LibroObject;
+
     public LibroJpaControllerTest() {
     }
 
     @BeforeAll
     public static void setUpClass() {
-        Libro prueba = new Libro();
-        Set<Ejemplar> ejemplar1 = new HashSet<Ejemplar>();
-        prueba.setEjemplarSet(ejemplar1);
-        Set<Reserva> reserva1 = new HashSet<Reserva>();
-        prueba.setReservaSet(reserva1);
+        mockEMF = Mockito.mock(EntityManagerFactory.class);
+        registro = new LibroJpaController(mockEMF);
+        LibroObject = new Libro(1);
     }
 
     @AfterAll
     public static void tearDownClass() {
     }
 
-    /**
-     * Test of getEntityManager method, of class LibroJpaController.
-     */
     @Test
     public void testGetEntityManager() {
         System.out.println("getEntityManager");
@@ -60,51 +57,58 @@ public class LibroJpaControllerTest {
 
     }
 
-    /**
-     * Test of create method, of class LibroJpaController.
-     */
     @Test
     public void testCreate() {
         System.out.println("create");
-
         EntityManager mockEM = Mockito.mock(EntityManager.class);
         EntityTransaction mockTX = Mockito.mock(EntityTransaction.class);
-        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        Mockito.when(mockEMF.createEntityManager()).thenReturn(mockEM);
         Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
-        LibroJpaController libro = new LibroJpaController(mockEMF);
-        libro.emf=mockEMF;
-        Libro nuevo = new Libro();
-        nuevo.setAutor("Paco");
-        nuevo.setId(1);
-        libro.create(nuevo);
-        Mockito.verify(mockEM, Mockito.times(1)).persist(Mockito.any());
+        this.registro.create(LibroObject);
+        Mockito.verify(mockEM).persist(this.LibroObject);
+        Mockito.verify(mockEM).close();
+    }
+
+    @Test
+    public void testEdit() throws Exception, NonexistentEntityException {
+        System.out.println("edit");
+        EntityManager mockEm = Mockito.mock(EntityManager.class);
+        EntityTransaction mockTx = Mockito.mock(EntityTransaction.class);
+        Mockito.when(mockEMF.createEntityManager()).thenReturn(mockEm);
+        Mockito.when(mockEm.getTransaction()).thenReturn(mockTx);
+
+        Mockito.when(mockEm.merge(LibroObject)).thenReturn(LibroObject);
+        registro.edit(LibroObject);
+        Mockito.verify(mockEm).merge(LibroObject);
+        Mockito.verify(mockEm).close();
+        RuntimeErrorException mockRx = Mockito.mock(RuntimeErrorException.class);
+
+        Mockito.when(mockEm.merge(LibroObject)).thenThrow(mockRx);
+        Bibliotecario mockB = Mockito.mock(Bibliotecario.class);
+        try {
+            registro.edit(LibroObject);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try {
+            registro.edit(LibroObject);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
     }
 
-    /**
-     * Test of edit method, of class LibroJpaController.
-     */
-//    @Test
-//    public void testEdit() throws Exception {
-//        System.out.println("edit");
-//        Libro libro = null;
-//        LibroJpaController instance = null;
-//        instance.edit(libro);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of destroy method, of class LibroJpaController.
-//     */
-//    @Test
-//    public void testDestroy() throws Exception {
-//        System.out.println("destroy");
-//        Long id = null;
-//        LibroJpaController instance = null;
-//        instance.destroy(id);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    @Test
+    public void testDestroy() throws Exception {
+        System.out.println("destroy");
+        Libro nuevo = Mockito.mock(Libro.class);
+        EntityManager mockEM= Mockito.mock(EntityManager.class);
+        EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
+        EntityTransaction mockTX = Mockito.mock(EntityTransaction.class);
+        LibroJpaController libro = new LibroJpaController(mockEMF);
+        Mockito.when(mockEM.getTransaction()).thenReturn(mockTX);
+        Mockito.when(libro.getEntityManager()).thenReturn(mockEM);
+        libro.destroy(nuevo);
+        
+    }
 }
-
