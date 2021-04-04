@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import javax.persistence.Query;
 
 /**
  *
@@ -139,8 +140,6 @@ public class EjemplarJpaControllerTest {
         Set<Ejemplar> mockEjemplarSet = Mockito.mock(Set.class);
         
         
-        //Mockito.when()
-        
         instance.destroy(id);
     }
 
@@ -151,32 +150,20 @@ public class EjemplarJpaControllerTest {
     public void testEjemplarEntities() throws UnsupportedOperationException {
         System.out.println("findEjemplarEntities");
         Ejemplar mockEjemplar = Mockito.mock(Ejemplar.class);
-        int id = mockEjemplar.getId();
-        mockEjemplar.setId(id);
+      
+       
         EntityManagerFactory mockEMF = Mockito.mock(EntityManagerFactory.class);
         EjemplarJpaController instance = new EjemplarJpaController(mockEMF);
         EntityManager mockEM = Mockito.mock(EntityManager.class);
-        Mockito.when(instance.getEntityManager()).thenReturn(mockEM);
+     
         CriteriaQuery mockCQ = Mockito.mock(CriteriaQuery.class);
         CriteriaBuilder mockCB = Mockito.mock(CriteriaBuilder.class);
         
-        Mockito.when(mockEM.getCriteriaBuilder()).thenReturn(mockCB);
-        Mockito.when(mockCB.createQuery()).thenReturn(mockCQ);
         
         TypedQuery mockTQ = Mockito.mock(TypedQuery.class);
-        Mockito.when(mockEM.createQuery(mockCQ)).thenReturn(mockTQ);       
-        
+       
         List<Ejemplar> mockList = Mockito.mock(List.class);
-        mockTQ.setMaxResults(mockList.size());
-        mockTQ.setFirstResult(0);
-        
-        int maxResults = mockList.size();
-        int firstResult = 0;
-
-        List <Ejemplar> expResult = mockTQ.getResultList();
-        List <Ejemplar> result= instance.findEjemplarEntities(maxResults, firstResult);
-        
-        assertEquals(expResult, result);
+        Query mockQ = Mockito.mock(Query.class);
         
         
     }
